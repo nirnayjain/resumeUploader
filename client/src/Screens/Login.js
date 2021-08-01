@@ -1,78 +1,133 @@
 import React,{useState} from "react";
 import {Link,useHistory} from 'react-router-dom'
-import Popup from '../Components/Popup'
+import {Grid,Typography,Container,Button,TextField,makeStyles} from '@material-ui/core'
 import axios from 'axios'
-
-export default function Login() {
+const useStyles = makeStyles((theme) => ({
+  
+  
+  textField: {
+    marginTop: "5px",
+  },
+  
+}));
+export default function Login({isEmployer}) {
+  const classes=useStyles()
      const  history =useHistory()
-      const [isOpen, setIsOpen] = useState(false);
-    const[data,setData]=useState({
-    Email:"",
+     
+    const[details,setDetails]=useState({
+    email:"",
     password:""
   })
-  const[error,setError]=useState("")
+ 
   const submit= async(e)=>{
     e.preventDefault()
- if(data.Email == "admin@namasys.com" && data.password == "admin123")
- {
-   try{
-     await axios.post("http://localhost:4000/api/user/login",{
-      email:data.Email,
-      password:data.password}
-    ,{withCredentials:true})
+    let email;
+    let pass;
+    if(!isEmployer) {
+        email="user@naukri.com"
+        pass="user@123"
     }
-     catch(error ){
-  if(error.response) { 
-    console.log(error.response.data)
-  }
-}
+    else
+    {
+       email='admin@naukri.com'
+       pass='admin@123'
+    }
+ if(details.email == email && details.password ==pass)
+ {
+//    try{
+//      await axios.post("http://localhost:5000/api/user/login",{
+//       email:details.email,
+//       password:details.password}
+//     ,{withCredentials:true})
+//     }
+//      catch(error ){
+//   if(error.response) { 
+//     console.log(error.response.details)
+//   }
+// }
+ if(!isEmployer)
      history.push("/home")
+     else
+      history.push("/employer")
  }
 
         else {
-           setIsOpen(!isOpen);
+           alert("Please enter correct login details")
         }
    
-    setData({
-    Email:"",
+    setDetails({
+    email:"",
     password:"" 
     })
      }
-  const handle=(e)=>{
-    const newData={...data}
-    newData[e.target.id]=e.target.value
-    setData(newData)
-    setError('')
-  }
-return (
-  <div style={{width:"50vh",margin:"auto"}}>
-      <h1 className="my-4 font-weight-bold .display-4">Sign In</h1>
-     <div className="conatiner">
-     <div className="form-div">
-  <form onSubmit={(e)=>submit(e)}>
-     <div>
-      <label htmlFor="Email">Email :</label>
-      <input type="email" id="Email" required onChange={(e)=>handle(e)} value={data.Email||""}  className="form-control form-group"/>
-    </div>
-     <div>
-      <label htmlFor="password">Password :</label>
-      <input type="password" id="password"  required onChange={(e)=>handle(e)} value={data.password||""}  className="form-control form-group"/>
-    </div>
-   <button className="btn btn-dark mt-3" type="submit">Login In</button> 
-   {isOpen && <Popup
-      content={<>
-        <p style={{color:"red",font:"50rem"}}>Invalid Credentials</p>
-      </>}
-      setIsOpen={setIsOpen}
-    />}
-  </form>
-  </div>
-  </div>
  
+return (
+  <Container maxWidth="xs" style={{display:'flex',justifyContent:'center',alignItems:'center',minHeight:'100vh'}}>
+   <Grid item container spacing={2} justify='flex-end'>
+        <Grid item xs={12} sm={12} md={12} lg={12} container justify='center'>
+          {!isEmployer?
+          <Typography variant="h5" className={classes.title}>
+            User Sign In
+          </Typography>:
+           <Typography variant="h6" className={classes.title}>
+            Employer Sign In
+          </Typography>
+}
+        </Grid>
+        <Grid item xs={12} sm={12} md={12} lg={12}>
+          <label  className={classes.label} >Email </label>
+          <TextField
+            
+            focused
+            placeholder="Enter your email id"
+            className={classes.textField}
+            size="small"
+            id="email"
+            type="email"
+            fullWidth={true}
+            value={details.email}
+            onChange={(e) => {
+              setDetails({
+                ...details,
+                email: e.target.value,
+              });
+            }}
+            required
+            variant="outlined"
+          />
+        </Grid>
+        <Grid item xs={12} sm={12} md={12} lg={12}>
+          <label className={classes.label}>Password</label>
+          <TextField
+            style={{ marginTop: "10px", color: "white" }}
+            focused
+            placeholder="Enter your Password"
+            InputLabelProps={{
+              classes: {
+                root: classes.label,
+              },
+            }}
+            size="small"
+            id="password"
+            type="password"
+            fullWidth={true}
+            value={details.password}
+            onChange={(e) => {
+              setDetails({
+                ...details,
+                password: e.target.value,
+              });
+            }}
+            required
+            variant="outlined"
+          />
+        </Grid>
+         <Grid item xs={12} sm={12} md={12} lg={12}container justify='center'>
+           <Button variant='contained' color='primary' onClick={submit}>Sign In</Button>
+         </Grid>
 
-
-
-  </div>
+        </Grid>
+        </Container>
   
   
 )

@@ -5,10 +5,10 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-     "start": "node backend/Server.js",
+    "start": "node backend/Server.js",
     "server": "nodemon  backend/Server.js",
     "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\"", 
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

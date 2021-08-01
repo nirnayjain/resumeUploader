@@ -12,16 +12,20 @@ const signUpTemplate=new mongoose.Schema({
     },
     phone:{
         type:Number,
-        required:true
+        // required:true
     },
     address:{
         type:String,
-        required:true
+        // required:true
     },
     date:{
         type:Date,
         default:Date.now
+    },
+    resume:{
+        type:String,
+        required:true
     }
 })
-const User=mongoose.model("Users",signUpTemplate)
+const User=mongoose.model("Naukri",signUpTemplate)
 export default User
